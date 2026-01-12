@@ -1,0 +1,25 @@
+// utils/M3UParser.kt
+package com.ds.iptv.utils
+
+import com.ds.iptv.model.Channel
+
+object M3UParser {
+
+    fun parse(content: String): List<Channel> {
+        val channels = mutableListOf<Channel>()
+        var name = ""
+        var logo: String? = null
+        var group: String? = null
+
+        content.lines().forEach {
+            if (it.startsWith("#EXTINF")) {
+                name = it.substringAfter(",")
+                logo = Regex("tvg-logo=\"(.*?)\"").find(it)?.groupValues?.get(1)
+                group = Regex("group-title=\"(.*?)\"").find(it)?.groupValues?.get(1)
+            } else if (it.startsWith("http")) {
+                channels.add(Channel(name, it, logo, group))
+            }
+        }
+        return channels
+    }
+}

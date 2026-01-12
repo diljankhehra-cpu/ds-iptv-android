@@ -1,0 +1,35 @@
+package com.ds.iptv
+
+import android.os.Bundle
+import android.widget.*
+import androidx.appcompat.app.AppCompatActivity
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.ds.iptv.adapter.ChannelAdapter
+import com.ds.iptv.utils.M3UParser
+import java.net.URL
+
+class MainActivity : AppCompatActivity() {
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_main)
+
+        val urlInput = findViewById<EditText>(R.id.m3uUrl)
+        val loadBtn = findViewById<Button>(R.id.loadBtn)
+        val recycler = findViewById<RecyclerView>(R.id.recycler)
+
+        recycler.layoutManager = LinearLayoutManager(this)
+
+        loadBtn.setOnClickListener {
+            Thread {
+                val data = URL(urlInput.text.toString()).readText()
+                val channels = M3UParser.parse(data)
+
+                runOnUiThread {
+                    recycler.adapter = ChannelAdapter(channels, this)
+                }
+            }.start()
+        }
+    }
+}
