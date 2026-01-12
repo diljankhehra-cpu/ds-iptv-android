@@ -1,0 +1,47 @@
+name: Android Build
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Step 1: Checkout repository
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      # Step 2: Set up JDK 17 (Kotlin target JVM 17)
+      - name: Set up JDK
+        uses: actions/setup-java@v3
+        with:
+          distribution: temurin
+          java-version: '17'
+
+      # Step 3: Set up Android SDK
+      - name: Set up Android SDK
+        uses: android-actions/setup-android@v2
+        with:
+          api-level: 34
+          build-tools: 34.0.0
+
+      # Step 4: Make Gradle wrapper executable
+      - name: Make Gradle wrapper executable
+        run: chmod +x ./gradlew
+
+      # Step 5: Build Debug APK
+      - name: Build Debug APK
+        run: ./gradlew assembleDebug --no-daemon
+
+      # Step 6: Upload Debug APK as artifact
+      - name: Upload APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: app-debug-apk
+          path: app/build/outputs/apk/debug/app-debug.apk
