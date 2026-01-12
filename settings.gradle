@@ -1,0 +1,2 @@
+rootProject.name = "DS-IPTV"
+include(":app")
