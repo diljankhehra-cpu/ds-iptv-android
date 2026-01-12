@@ -1,6 +1,7 @@
 plugins {
     id 'com.android.application'
     id 'org.jetbrains.kotlin.android'
+    id 'kotlin-kapt'
 }
 
 android {
@@ -13,13 +14,26 @@ android {
         targetSdk 34
         versionCode 1
         versionName "1.0"
+
+        vectorDrawables {
+            useSupportLibrary true
+        }
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile(
+                    'proguard-android-optimize.txt'
+            ), 'proguard-rules.pro'
+        }
     }
 
     buildFeatures {
         viewBinding true
     }
 
-    // 🔧 FIX: Java + Kotlin SAME JVM TARGET
+    // ✅ Java 17 support (MANDATORY)
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_17
         targetCompatibility JavaVersion.VERSION_17
@@ -40,6 +54,10 @@ dependencies {
     // Material 3
     implementation "com.google.android.material:material:1.11.0"
 
-    // Player
+    // ExoPlayer
     implementation "com.google.android.exoplayer:exoplayer:2.19.1"
+
+    // Glide (Image Loader)
+    implementation "com.github.bumptech.glide:glide:4.16.0"
+    kapt "com.github.bumptech.glide:compiler:4.16.0"
 }

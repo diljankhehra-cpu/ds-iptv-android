@@ -1,6 +1,5 @@
 package com.ds.iptv.adapter
 
-import android.content.Context
 import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
@@ -14,35 +13,33 @@ import com.ds.iptv.R
 import com.ds.iptv.model.Channel
 
 class ChannelAdapter(
-    private val list: List<Channel>,
-    private val context: Context
+    private val list: List<Channel>
 ) : RecyclerView.Adapter<ChannelAdapter.VH>() {
 
-    class VH(v: View) : RecyclerView.ViewHolder(v) {
-        val name: TextView = v.findViewById(R.id.channelName)
-        val logo: ImageView = v.findViewById(R.id.channelLogo)
+    inner class VH(view: View) : RecyclerView.ViewHolder(view) {
+        val name: TextView = view.findViewById(R.id.txtName)
+        val logo: ImageView = view.findViewById(R.id.imgLogo)
     }
 
-    override fun onCreateViewHolder(p: ViewGroup, v: Int): VH {
-        return VH(
-            LayoutInflater.from(p.context)
-                .inflate(R.layout.row_channel, p, false)
-        )
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): VH {
+        val v = LayoutInflater.from(parent.context)
+            .inflate(R.layout.item_channel, parent, false)
+        return VH(v)
     }
 
-    override fun onBindViewHolder(h: VH, i: Int) {
-        val c = list[i]
-        h.name.text = c.name
+    override fun onBindViewHolder(holder: VH, position: Int) {
+        val channel = list[position]
 
-        Glide.with(context)
-            .load(c.logo)
-            .placeholder(R.drawable.ic_tv)
-            .into(h.logo)
+        holder.name.text = channel.name
 
-        h.itemView.setOnClickListener {
-            val intent = Intent(context, PlayerActivity::class.java)
-            intent.putExtra("url", c.url)
-            context.startActivity(intent)
+        Glide.with(holder.itemView.context)
+            .load(channel.logo)
+            .into(holder.logo)
+
+        holder.itemView.setOnClickListener {
+            val i = Intent(holder.itemView.context, PlayerActivity::class.java)
+            i.putExtra("url", channel.url)
+            holder.itemView.context.startActivity(i)
         }
     }
 
