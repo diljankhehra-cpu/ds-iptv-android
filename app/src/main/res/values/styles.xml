@@ -1,6 +1,8 @@
-<?xml version="1.0" encoding="utf-8"?>
+(<?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <style name="Theme.IPTV" parent="Theme.Material3.DayNight.NoActionBar" />
+    <style name="Theme.DSIPTV" parent="Theme.Material3.DayNight.NoActionBar">
+        <!-- status bar / nav bar optional -->
+    </style>
 
 </resources>
